@@ -1,16 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Lit + TS</title>
-    <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/my-element.ts"></script>
+    <script type="module" src="./src/repeat-pattern.ts"></script>
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+      }
+
+      repeat-pattern {
+        height: 100vh;
+        width: 100vw;
+      }
+    </style>
+    <title>Repeat patterns with SVG</title>
   </head>
   <body>
-    <my-element>
-      <h1>Vite + Lit</h1>
-    </my-element>
+    <repeat-pattern></repeat-pattern>
   </body>
 </html>
