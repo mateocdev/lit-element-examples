@@ -8,7 +8,11 @@ const createElement = (chars: string): SVGTemplateResult => svg`
     ${chars}
   </text>;
 `;
-
+const createTileBoundary = () => svg`
+  <clipPath id="rect-clip">
+    <rect width="200" height="200"></rect>
+  </clipPath>
+`;
 const createMotif = (
   numPrints: number,
   offset: number = 0
@@ -26,8 +30,18 @@ const createMotif = (
       </use>
     `);
   }
-  return svg`<g transform="translate(50, 50)">${prints}</g>`;
+  return svg`<g id="motif" transform="translate(50, 50)">${prints}</g>`;
 };
+
+const createTile = () => svg`
+  <g clip-path="url(#rect-clip)">
+    <use transform="translate(0, 0)" href="#motif"></use>
+    <use transform="translate(0, 100)" href="#motif"></use>
+    <use transform="translate(100, -50)" href="#motif"></use>
+    <use transform="translate(100, 50)" href="#motif"></use>
+    <use transform="translate(100, 150)" href="#motif"></use>
+  </g>
+`;
 
 @customElement("repeat-pattern")
 export class RepeatPattern extends LitElement {
@@ -39,9 +53,12 @@ export class RepeatPattern extends LitElement {
   })
   rotationOffset = 0;
   render() {
-    return html`<svg>
-      <defs>${createElement(this.chars)}</defs>
-      ${createMotif(this.numPrints, this.rotationOffset)}
+    return html`<svg height="100%" width="100%">
+      ${createTile()}
+      <defs>
+        ${createTileBoundary()} ${createElement(this.chars)}
+        ${createMotif(this.numPrints, this.rotationOffset)}
+      </defs>
     </svg> `;
   }
 }
