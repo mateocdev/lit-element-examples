@@ -4,15 +4,15 @@ import { LitElement, html, svg } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 const createElement = (chars: string): SVGTemplateResult => svg`
-  <text id="chars" dominant-baseline="hanging" font-family="monospace" font-size="24px">
+  <text
+    id="chars"
+    dominant-basline="hanging"
+    font-family="monospace"
+    font-size="24px">
     ${chars}
-  </text>;
+  </text>
 `;
-const createTileBoundary = () => svg`
-  <clipPath id="rect-clip">
-    <rect width="200" height="200"></rect>
-  </clipPath>
-`;
+
 const createMotif = (
   numPrints: number,
   offset: number = 0
@@ -30,8 +30,21 @@ const createMotif = (
       </use>
     `);
   }
-  return svg`<g id="motif" transform="translate(50, 50)">${prints}</g>`;
+
+  return svg`
+    <g
+      id="motif"
+      transform="translate(50, 50)">
+        ${prints}
+    </g>
+  `;
 };
+
+const createTileBoundary = () => svg`
+  <clipPath id="rect-clip">
+    <rect width="200" height="200"></rect>
+  </clipPath>
+`;
 
 const createTile = () => svg`
   <g clip-path="url(#rect-clip)">
@@ -43,6 +56,18 @@ const createTile = () => svg`
   </g>
 `;
 
+const createRepeatPattern = () => svg`
+  <pattern
+    id="repeat-pattern"
+    x="-10"
+    y="-10"
+    width="200"
+    height="200"
+    patternUnits="userSpaceOnUse">
+    ${createTile()}
+  </pattern>
+`;
+
 @customElement("repeat-pattern")
 export class RepeatPattern extends LitElement {
   @property({ type: String }) chars = "";
@@ -52,13 +77,19 @@ export class RepeatPattern extends LitElement {
     attribute: "rotation-offset",
   })
   rotationOffset = 0;
+
   render() {
-    return html`<svg height="100%" width="100%">
-      ${createTile()}
-      <defs>
-        ${createTileBoundary()} ${createElement(this.chars)}
-        ${createMotif(this.numPrints, this.rotationOffset)}
-      </defs>
-    </svg> `;
+    return html`
+      <svg height="100%" width="100%">
+        <defs>
+          ${createTileBoundary()} ${createElement(this.chars)}
+          ${createMotif(this.numPrints, this.rotationOffset)}
+          ${createRepeatPattern()}
+        </defs>
+
+        <rect fill="#ffffff" height="100%" width="100%"></rect>
+        <rect fill="url(#repeat-pattern)" height="100%" width="100%"></rect>
+      </svg>
+    `;
   }
 }
